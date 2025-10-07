@@ -5,6 +5,8 @@ app.get('/', (req, res) => {
     res.send("Hello from CI/CD Demo!");
 });
 
+
+
 app.listen(PORT, () => {
     console.log(`Application is running on Port ${PORT}`);
 });
