@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 18
 
-    #backend
+      #Backend
       - name: Install and Test backend
         working-directory: ./server
         run: |
@@ -33,3 +33,20 @@ jobs:
           npm run build
       - name: CI Finished
         run: echo "CI Pipeline completed Successfully!"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      #deploy frontend to Vercel
+      - name: Deploy to Vercel
+        run: npx vercel --prod --token=$VERCEL_TOKEN --cwd=client
+        env: VERCEL_TOKEN:${{secrets.VERCEL_TOKEN}}
+
+      - name: Deploy to Render
+        run: |
+          curl -X POST "$RENDER_DEPLOY_HOOK"
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
