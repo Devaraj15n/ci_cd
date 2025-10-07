@@ -1,0 +1,35 @@
+name: Simple React and Nodejs CI and CD
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+    #backend
+      - name: Install and Test backend
+        working-directory: ./server
+        run: |
+          npm install
+          npm test
+
+      #frontend
+      - name: Install and Build frontend
+        working-directory: ./client
+        run: |
+          npm install
+          npm run build
+      - name: CI Finished
+        run: echo "CI Pipeline completed Successfully!"
