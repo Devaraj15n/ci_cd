@@ -29,8 +29,10 @@ jobs:
       - name: Install and Build frontend
         working-directory: ./client
         run: |
-          npm install
-          npm run build
+           # Remove existing node_modules in case of cached bad permissions
+            rm -rf node_modules package-lock.json
+            npm install --unsafe-perm
+            npm run build
       - name: CI Finished
         run: echo "CI Pipeline completed Successfully!"
   deploy:
